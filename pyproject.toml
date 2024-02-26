@@ -25,5 +25,5 @@ distribution = false
 
 # Scripts for development
 [tool.pdm.scripts]
-dev = "uvicorn python_web_server_template.main:app --reload"
+dev = "uvicorn app.main:app --reload"
 test = "pytest"
