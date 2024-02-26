@@ -1,7 +1,10 @@
+import logging
+
 from fastapi import FastAPI
 from pydantic import BaseModel
 
 app = FastAPI()
+log = logging.getLogger(__name__)
 
 
 class Item(BaseModel):
@@ -11,6 +14,9 @@ class Item(BaseModel):
 
 @app.get("/")
 def read_root():
+    log.info("info log")
+    log.debug("debug log")
+    log.error("error log")
     return {"Hello": "World"}
 
 

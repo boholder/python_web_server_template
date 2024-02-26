@@ -25,5 +25,5 @@ distribution = false
 
 # Scripts for development
 [tool.pdm.scripts]
-dev = "uvicorn app.main:app --reload"
+dev = "uvicorn app.main:app --reload --log-config resources/log_config.yaml"
 test = "pytest"
