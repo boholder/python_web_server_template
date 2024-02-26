@@ -1,11 +1,16 @@
 version: 1
 disable_existing_loggers: False
+filters:
+  correlation_id:
+    (): "asgi_correlation_id.CorrelationIdFilter"
+    uuid_length: 16
+    default_value: "-"
 formatters:
   default:
     # time | log level | logger name | process id | thread id | message
     # %(levelname)8s: max 8 characters for "CRITICAL"
     # ref: https://docs.python.org/3/library/logging.html#logrecord-attributes
-    format: '%(asctime)s|%(levelname)-8s|%(name)s|%(process)d|%(thread)d| %(message)s'
+    format: '%(asctime)s|%(levelname)-8s|%(name)s|%(correlation_id)s|%(process)d|%(thread)d| %(message)s'
 handlers:
   default:
     formatter: default
@@ -20,14 +25,20 @@ loggers:
     level: INFO
     handlers:
       - default
+    filters:
+      - correlation_id
     propagate: no
   uvicorn.access:
     level: INFO
     handlers:
       - access
+    filters:
+      - correlation_id
     propagate: no
 root:
   level: DEBUG
   handlers:
     - default
+  filters:
+    - correlation_id
   propagate: no

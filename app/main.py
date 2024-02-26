@@ -1,9 +1,11 @@
 import logging
 
+from asgi_correlation_id import CorrelationIdMiddleware
 from fastapi import FastAPI
 from pydantic import BaseModel
 
 app = FastAPI()
+app.add_middleware(CorrelationIdMiddleware)
 log = logging.getLogger(__name__)
 
 

@@ -5,7 +5,7 @@
 groups = ["default", "test", "http"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:b3979c55bb8337256026be86f45338fe96b2587c002a2e7ecbdc04855d4c60cf"
+content_hash = "sha256:776ff47108749419b67d12a988bad6cd53861a214093f5f05606d2fd31aa83a4"
 
 [[package]]
 name = "annotated-types"
@@ -31,6 +31,20 @@ dependencies = [
 files = [
     {file = "anyio-4.3.0-py3-none-any.whl", hash = "sha256:048e05d0f6caeed70d731f3db756d35dcc1f35747c8c403364a8332c630441b8"},
     {file = "anyio-4.3.0.tar.gz", hash = "sha256:f75253795a87df48568485fd18cdd2a3fa5c4f7c5be8e5e36637733fce06fed6"},
+]
+
+[[package]]
+name = "asgi-correlation-id"
+version = "4.3.1"
+requires_python = ">=3.8,<4.0"
+summary = "Middleware correlating project logs to individual requests"
+groups = ["default"]
+dependencies = [
+    "starlette>=0.18",
+]
+files = [
+    {file = "asgi_correlation_id-4.3.1-py3-none-any.whl", hash = "sha256:128509a822e87ac544662804b402761ee2d8fd9769f23339cff220d22d222546"},
+    {file = "asgi_correlation_id-4.3.1.tar.gz", hash = "sha256:3d7efa2c002fa909d6e1a452c1cf8088ff5ac186884b4d9aa5430ed00b036278"},
 ]
 
 [[package]]

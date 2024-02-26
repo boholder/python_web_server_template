@@ -10,6 +10,9 @@ dependencies = [
     "uvicorn[standard]>=0.27.1",
     # The starlette.testclient module requires the httpx package to be installed.
     "httpx>=0.27.0",
+    # For using X-Request-ID HTTP header or self-generated id as trace id shown in logs
+    # ref: https://github.com/snok/asgi-correlation-id
+    "asgi-correlation-id>=4.3.1",
 ]
 requires-python = "==3.11.*"
 readme = "README.md"
