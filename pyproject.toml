@@ -16,3 +16,7 @@ license = {text = "MIT"}
 
 [tool.pdm]
 distribution = false
+
+# Scripts for development
+[tool.pdm.scripts]
+dev = "uvicorn python_web_server_template.main:app --reload"
