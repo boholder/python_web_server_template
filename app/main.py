@@ -1,7 +1,10 @@
 import logging
+import logging.config
+import logging.handlers
+from contextlib import asynccontextmanager
 
 import uvicorn
-from asgi_correlation_id import CorrelationIdMiddleware, correlation_id
+from asgi_correlation_id import correlation_id, CorrelationIdMiddleware
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.exception_handlers import http_exception_handler
 from pydantic import BaseModel
@@ -10,16 +13,37 @@ from uvicorn.config import LOGGING_CONFIG
 
 import log_config
 
-app = FastAPI()
-app.add_middleware(CorrelationIdMiddleware)
-
-log_config.config_app_logging()
-log = logging.getLogger(__name__)
+log: logging.Logger
 
 
 class Item(BaseModel):
     name: str
     price: float
+
+
+FILE_HANDLER_NAME = "file_handler"
+
+
+def find_log_file_handler() -> logging.Handler:
+    # ref: https://stackoverflow.com/a/55400327/11397457
+    l = logging.Logger.manager.loggerDict["uvicorn"]
+    for h in l.handlers:
+        if isinstance(h, logging.handlers.TimedRotatingFileHandler):
+            return h
+    raise Exception("Can not found file handler.")
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # We must configure app logging after uvicorn started, thus the file handler should exists for reusing.
+    log_config.configure_app_logging(find_log_file_handler())
+    global log
+    log = logging.getLogger(__name__)
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
+app.add_middleware(CorrelationIdMiddleware)
 
 
 @app.get("/")
@@ -54,13 +78,19 @@ async def unhandled_exception_handler(request: Request, exc: Exception) -> Respo
         ))
 
 
-def config_uvicorn_logging():
-    LOGGING_CONFIG["handlers"]["access"]["filters"] = [log_config.TRACE_ID_FILTER]
-    LOGGING_CONFIG["handlers"]["default"]["filters"] = [log_config.TRACE_ID_FILTER]
-    LOGGING_CONFIG["formatters"]["access"]["fmt"] = log_config.LOG_FORMAT_PATTERN
-    LOGGING_CONFIG["formatters"]["default"]["fmt"] = log_config.LOG_FORMAT_PATTERN
+def configure_uvicorn_logging():
+    extra_filters = [log_config.TRACE_ID_FILTER]
+    for handler in LOGGING_CONFIG["handlers"].values():
+        handler["filters"] = handler["filters"] + extra_filters if "filters" in handler else extra_filters
+    for formatter in LOGGING_CONFIG["formatters"].values():
+        formatter["fmt"] = log_config.LOG_FORMAT_PATTERN
+
+    LOGGING_CONFIG["handlers"][FILE_HANDLER_NAME] = log_config.FILE_HANDLER_CONFIG
+    for logger in LOGGING_CONFIG["loggers"].values():
+        if "handlers" in logger:
+            logger["handlers"] += [FILE_HANDLER_NAME]
 
 
 if __name__ == "__main__":
-    config_uvicorn_logging()
+    configure_uvicorn_logging()
     uvicorn.run("main:app", port=8000, reload=True)
