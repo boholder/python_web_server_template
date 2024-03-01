@@ -7,19 +7,13 @@ import uvicorn
 from asgi_correlation_id import correlation_id, CorrelationIdMiddleware
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.exception_handlers import http_exception_handler
-from pydantic import BaseModel
 from starlette.responses import Response
 from uvicorn.config import LOGGING_CONFIG
 
 import log_config
+from routers import demo
 
 log: logging.Logger
-
-
-class Item(BaseModel):
-    name: str
-    price: float
-
 
 FILE_HANDLER_NAME = "file_handler"
 
@@ -43,25 +37,8 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+app.include_router(demo.router)
 app.add_middleware(CorrelationIdMiddleware)
-
-
-@app.get("/")
-def read_root():
-    log.info("info log")
-    log.debug("debug log")
-    log.error("error log")
-    return {"Hello": "World"}
-
-
-@app.get("/get/{item_id}")
-def read_item(item_id: int, q: str | None = None):
-    return {"item_id": item_id, "q": q}
-
-
-@app.post("/post")
-def post_item(item: Item):
-    return {"item_name": item.name, "item_price": item.price}
 
 
 @app.exception_handler(Exception)
@@ -79,6 +56,7 @@ async def unhandled_exception_handler(request: Request, exc: Exception) -> Respo
 
 
 def configure_uvicorn_logging():
+    """Must configure the uvicorn.config.LOGGING_CONFIG within the same module that runs uvicorn.run()."""
     extra_filters = [log_config.TRACE_ID_FILTER]
     for handler in LOGGING_CONFIG["handlers"].values():
         handler["filters"] = handler["filters"] + extra_filters if "filters" in handler else extra_filters
@@ -86,6 +64,9 @@ def configure_uvicorn_logging():
         formatter["fmt"] = log_config.LOG_FORMAT_PATTERN
 
     LOGGING_CONFIG["handlers"][FILE_HANDLER_NAME] = log_config.FILE_HANDLER_CONFIG
+    # There are three loggers in uvicorn default logging config: "uvicorn", "uvicorn.access", "uvicorn.error".
+    # We need to add "file_handler" to logger "uvicorn" and "uvicorn.access"
+    # since logger "uvicorn.error" will propagate the log to the other two.
     for logger in LOGGING_CONFIG["loggers"].values():
         if "handlers" in logger:
             logger["handlers"] += [FILE_HANDLER_NAME]
