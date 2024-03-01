@@ -13,6 +13,11 @@ from routers import demo, heavy_task
 
 
 def find_log_file_handler() -> logging.Handler:
+    """
+    I don't want to create two file logging handlers for one same file,
+    although it works, I'm not sure if this solution is reliable under heavy workload.
+    """
+
     # ref: https://stackoverflow.com/a/55400327/11397457
     l = logging.Logger.manager.loggerDict["uvicorn"]
     for h in l.handlers:
