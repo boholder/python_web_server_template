@@ -16,16 +16,16 @@ LOG_FORMAT_PATTERN = "%(asctime)s|%(levelname)-8s|%(name)s|%(correlation_id)s|%(
 TRACE_ID_FILTER = CorrelationIdFilter(name="trace_id_filter", uuid_length=16, default_value="-")
 
 _HOME_PATH = os.path.expanduser("~")
-_LOG_FILE_PATH = Path(_HOME_PATH + "/logs/app.log")
+_DEFAULT_LOG_FILE_PATH = Path(_HOME_PATH + "/logs/app.log")
 # create parent directories of log file if these do not exist
-_LOG_FILE_PATH.parent.mkdir(exist_ok=True, parents=True)
+_DEFAULT_LOG_FILE_PATH.parent.mkdir(exist_ok=True, parents=True)
 
 # It will be added to logging config as "file_handler" for uvicorn config initializing
 FILE_HANDLER_CONFIG = {
     "formatter": "default",
     # ref: https://docs.python.org/3/library/logging.handlers.html#timedrotatingfilehandler
     "class": "logging.handlers.TimedRotatingFileHandler",
-    "filename": _LOG_FILE_PATH,
+    "filename": _DEFAULT_LOG_FILE_PATH,
     "when": "midnight",
     "backupCount": 7,
     "encoding": "utf-8",
