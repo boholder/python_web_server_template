@@ -1,0 +1,27 @@
+# Shamelessly copied from https://github.com/pdm-project/pdm/blob/main/.pre-commit-config.yaml
+# Thank you PDM!
+
+ci:
+  autoupdate_schedule: monthly
+repos:
+  # Upgrading the syntax
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.15.0
+    hooks:
+      - id: pyupgrade
+        args: [ --py311-plus ]
+
+  # Linting, formatting
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.3.2
+    hooks:
+      - id: ruff
+        args: [ --fix, --show-fixes ]
+      - id: ruff-format
+
+  # Typo checking
+  # See setup.cfg for args
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.2.6
+    hooks:
+      - id: codespell
