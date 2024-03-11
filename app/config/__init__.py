@@ -1,4 +1,5 @@
 import argparse
+import sys
 from pathlib import Path
 
 import yaml
@@ -21,8 +22,9 @@ ARG_PARSER.add_argument("-c", "--config", help="Path of the config file", type=P
 ARG_PARSER.add_argument("--debug", help="Enable debug mode", action='store_true')
 
 
-def get_command_args() -> argparse.Namespace:
-    return ARG_PARSER.parse_args()
+def get_command_args(args: list[str] = None) -> argparse.Namespace:
+    args = sys.argv[1:] if args is None else args
+    return ARG_PARSER.parse_args(args)
 
 
 def configure_app():
@@ -56,3 +58,4 @@ def configure_debug_mode(args: argparse.Namespace = None):
     if args.debug:
         global CONFIG
         CONFIG.debug_mode = True
+        CONFIG.log_level = "DEBUG"
