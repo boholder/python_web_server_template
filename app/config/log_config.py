@@ -32,10 +32,9 @@ FILE_HANDLER_CONFIG = {
 }
 
 
-def configure_app_logging(file_handler: logging.Handler) -> None:
-    """
-    :param file_handler: Reuse the file handler instance created by uvicorn
-    """
+def configure_app_logging(file_handler: logging.Handler | None = None) -> None:
+    if file_handler is None:
+        file_handler = find_log_file_handler()
 
     console_handler = logging.StreamHandler()
     console_handler.addFilter(TRACE_ID_FILTER)
@@ -46,6 +45,7 @@ def configure_app_logging(file_handler: logging.Handler) -> None:
 
 def find_log_file_handler() -> logging.Handler:
     """
+    Reuse the file handler instance created by uvicorn.
     I don't want to create two file logging handlers for one same file,
     although it works, I'm not sure if this solution is reliable under heavy workload.
     """

@@ -16,8 +16,8 @@ async def lifespan(_: FastAPI):
 
     # We must configure app logging after uvicorn started,
     # thus the file handler should exist for reusing.
-    file_handler = log_config.find_log_file_handler()
-    log_config.configure_app_logging(file_handler)
+    log_config.configure_app_logging()
+
     yield
 
 
