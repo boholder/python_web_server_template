@@ -1,6 +1,6 @@
 from contextlib import asynccontextmanager
 
-from asgi_correlation_id import correlation_id, CorrelationIdMiddleware
+from asgi_correlation_id import CorrelationIdMiddleware, correlation_id
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.exception_handlers import http_exception_handler
 from starlette.responses import Response
@@ -32,9 +32,5 @@ async def unhandled_exception_handler(request: Request, exc: Exception) -> Respo
     ref: https://github.com/snok/asgi-correlation-id?tab=readme-ov-file#fastapi-1
     """
     return await http_exception_handler(
-        request,
-        HTTPException(
-            500,
-            'Internal server error',
-            headers={'X-Request-ID': correlation_id.get() or ""}
-        ))
+        request, HTTPException(500, "Internal server error", headers={"X-Request-ID": correlation_id.get() or ""})
+    )

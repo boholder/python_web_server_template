@@ -40,9 +40,8 @@ def configure_app_logging(file_handler: logging.Handler) -> None:
     console_handler = logging.StreamHandler()
     console_handler.addFilter(TRACE_ID_FILTER)
     logging.basicConfig(
-        handlers=[console_handler, file_handler],
-        level=config.CONFIG.log_level,
-        format=LOG_FORMAT_PATTERN)
+        handlers=[console_handler, file_handler], level=config.CONFIG.log_level, format=LOG_FORMAT_PATTERN
+    )
 
 
 def find_log_file_handler() -> logging.Handler:

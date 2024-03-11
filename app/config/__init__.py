@@ -19,10 +19,10 @@ CONFIG: AppConfigs = AppConfigs()
 
 ARG_PARSER = argparse.ArgumentParser(description="Web Server")
 ARG_PARSER.add_argument("-c", "--config", help="Path of the config file", type=Path)
-ARG_PARSER.add_argument("--debug", help="Enable debug mode", action='store_true')
+ARG_PARSER.add_argument("--debug", help="Enable debug mode", action="store_true")
 
 
-def get_command_args(args: list[str] = None) -> argparse.Namespace:
+def get_command_args(args: list[str] | None = None) -> argparse.Namespace:
     args = sys.argv[1:] if args is None else args
     return ARG_PARSER.parse_args(args)
 
@@ -52,7 +52,7 @@ def configure_app_with(config_file_path: Path):
     CONFIG = parsed
 
 
-def configure_debug_mode(args: argparse.Namespace = None):
+def configure_debug_mode(args: argparse.Namespace | None = None):
     if not args:
         args = get_command_args()
     if args.debug:

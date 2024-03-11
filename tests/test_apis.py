@@ -12,12 +12,12 @@ def test_root():
 
 
 def test_get():
-    response = client.get('/get/1?q=hi')
+    response = client.get("/get/1?q=hi")
     assert response.status_code == 200
     assert response.json() == {"item_id": 1, "q": "hi"}
 
 
 def test_post():
-    response = client.post('/post', json={"name": "Foo", "price": 42.0})
+    response = client.post("/post", json={"name": "Foo", "price": 42.0})
     assert response.status_code == 200
     assert response.json() == {"item_name": "Foo", "item_price": 42.0}
