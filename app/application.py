@@ -8,8 +8,8 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.exception_handlers import http_exception_handler
 from starlette.responses import Response
 
-import log_config
-from routers import demo, heavy_task
+from app import log_config
+from app.routers import demo
 
 
 def find_log_file_handler() -> logging.Handler:
@@ -27,7 +27,7 @@ def find_log_file_handler() -> logging.Handler:
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(_: FastAPI):
     # We must configure app logging after uvicorn started, thus the file handler should exists for reusing.
     log_config.configure_app_logging(find_log_file_handler())
     global log
@@ -35,13 +35,12 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(lifespan=lifespan)
-app.include_router(demo.router)
-app.include_router(heavy_task.router)
-app.add_middleware(CorrelationIdMiddleware)
+APP = FastAPI(lifespan=lifespan)
+APP.include_router(demo.router)
+APP.add_middleware(CorrelationIdMiddleware)
 
 
-@app.exception_handler(Exception)
+@APP.exception_handler(Exception)
 async def unhandled_exception_handler(request: Request, exc: Exception) -> Response:
     """
     ref: https://github.com/snok/asgi-correlation-id?tab=readme-ov-file#fastapi-1

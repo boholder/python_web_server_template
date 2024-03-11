@@ -1,11 +1,7 @@
-import logging.handlers
-
 import uvicorn
 from uvicorn.config import LOGGING_CONFIG
 
 import log_config
-
-log: logging.Logger
 
 
 def configure_uvicorn_logging():
@@ -29,4 +25,4 @@ def configure_uvicorn_logging():
 
 if __name__ == "__main__":
     configure_uvicorn_logging()
-    uvicorn.run("app:app", port=8000, reload=True)
+    uvicorn.run("application:APP", port=8000, reload=True)
