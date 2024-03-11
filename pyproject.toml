@@ -51,7 +51,7 @@ filterwarnings = [
 line-length = 120
 exclude = ["tests/fixtures"]
 target-version = "py311"
-src = ["app"]
+src = ["app", "tests"]
 
 [tool.ruff.lint]
 extend-select = [
