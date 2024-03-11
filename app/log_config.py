@@ -6,7 +6,7 @@ from pathlib import Path
 
 from asgi_correlation_id import CorrelationIdFilter
 
-LOG_LEVEL = "INFO"
+from app import config
 
 # time | log level | logger name | trace id | process id | thread id | message
 # %(levelname)8s: max 8 characters for "CRITICAL"
@@ -41,5 +41,19 @@ def configure_app_logging(file_handler: logging.Handler) -> None:
     console_handler.addFilter(TRACE_ID_FILTER)
     logging.basicConfig(
         handlers=[console_handler, file_handler],
-        level=LOG_LEVEL,
+        level=config.CONFIG.log_level,
         format=LOG_FORMAT_PATTERN)
+
+
+def find_log_file_handler() -> logging.Handler:
+    """
+    I don't want to create two file logging handlers for one same file,
+    although it works, I'm not sure if this solution is reliable under heavy workload.
+    """
+
+    # ref: https://stackoverflow.com/a/55400327/11397457
+    uvicorn_logger = logging.Logger.manager.loggerDict["uvicorn"]
+    for h in uvicorn_logger.handlers:
+        if isinstance(h, logging.handlers.TimedRotatingFileHandler):
+            return h
+    raise Exception("Can not found file handler.")

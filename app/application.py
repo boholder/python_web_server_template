@@ -1,6 +1,3 @@
-import logging
-import logging.config
-import logging.handlers
 from contextlib import asynccontextmanager
 
 from asgi_correlation_id import correlation_id, CorrelationIdMiddleware
@@ -8,30 +5,19 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.exception_handlers import http_exception_handler
 from starlette.responses import Response
 
+from app import config
 from app import log_config
 from app.routers import demo
 
 
-def find_log_file_handler() -> logging.Handler:
-    """
-    I don't want to create two file logging handlers for one same file,
-    although it works, I'm not sure if this solution is reliable under heavy workload.
-    """
-
-    # ref: https://stackoverflow.com/a/55400327/11397457
-    l = logging.Logger.manager.loggerDict["uvicorn"]
-    for h in l.handlers:
-        if isinstance(h, logging.handlers.TimedRotatingFileHandler):
-            return h
-    raise Exception("Can not found file handler.")
-
-
 @asynccontextmanager
 async def lifespan(_: FastAPI):
-    # We must configure app logging after uvicorn started, thus the file handler should exists for reusing.
-    log_config.configure_app_logging(find_log_file_handler())
-    global log
-    log = logging.getLogger(__name__)
+    config.configure_app()
+
+    # We must configure app logging after uvicorn started,
+    # thus the file handler should exist for reusing.
+    file_handler = log_config.find_log_file_handler()
+    log_config.configure_app_logging(file_handler)
     yield
 
 
