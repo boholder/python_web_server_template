@@ -6,7 +6,7 @@ from fastapi.exception_handlers import http_exception_handler
 from starlette.responses import Response
 
 from app import config
-from app import log_config
+from app.config import log_config
 from app.routers import demo
 
 

@@ -2,7 +2,7 @@ import uvicorn
 from uvicorn.config import LOGGING_CONFIG
 
 from app import config
-from app import log_config
+from app.config import log_config
 
 
 def configure_uvicorn_logging():
