@@ -35,3 +35,13 @@ distribution = false
 [tool.pdm.scripts]
 dev = "python app/main.py --debug"
 test = "pytest"
+
+[tool.pytest.ini_options]
+pythonpath = ["app", "tests"]
+testpaths = ["tests"]
+filterwarnings = [
+    # This's a warning from httpx library, which is used in our unit tests:
+    # fastapi.testclient.TestClient -> starlette -> httpx
+    # Let's ignore it.
+    "ignore:The \\'app\\' shortcut is now deprecated. Use the explicit style \\'transport=WSGITransport\\(app=\\.\\.\\.\\)\\' instead\\.",
+]

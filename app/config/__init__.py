@@ -47,7 +47,7 @@ def configure_app_with(config_file_path: Path):
     with open(config_file_path) as f:
         file_content = yaml.safe_load(f)
 
-    parsed = AppConfigs.parse_obj(file_content["app"])
+    parsed = AppConfigs.model_validate(file_content["app"])
     global CONFIG
     CONFIG = parsed
 
