@@ -43,6 +43,7 @@ class AppConfigs(BaseModel):
 
 # Global configuration object
 # initialize with default values
+# Make sure to use "config.CONFIG.xxx" to access it, so it can retrieve newly updated values
 CONFIG: AppConfigs = AppConfigs()
 
 ARG_PARSER = argparse.ArgumentParser(description="Web Server")

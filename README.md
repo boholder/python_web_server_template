@@ -1,5 +1,11 @@
 # python_web_server_template
 
+## Branches
+
+This project is mainly for my own use, but I'll leave separate branches for different features.
+The `main` branch contains all features.
+The `basic` branch contains only early configuration, logging, ci code.
+
 ## Configuration
 
 For all available configuration see [AppConfigs](/app/config/__init__.py) class.
