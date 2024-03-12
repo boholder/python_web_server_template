@@ -27,4 +27,4 @@ def configure_uvicorn_logging():
 if __name__ == "__main__":
     config.configure_app()
     configure_uvicorn_logging()
-    uvicorn.run("application:APP", port=8000, reload=config.CONFIG.debug_mode)
+    uvicorn.run("application:APP", port=config.CONFIG.port, reload=config.CONFIG.debug_mode)

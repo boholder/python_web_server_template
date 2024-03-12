@@ -20,6 +20,7 @@ def get_default_log_file_path() -> Path:
 class AppConfigs(BaseModel):
     """Contains the configuration for this application."""
 
+    port: int = 8000
     log_level: str = "INFO"
     log_file_path: Path = get_default_log_file_path()
     # time | log level | logger name | trace id | process id | thread id | message
