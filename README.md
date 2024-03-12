@@ -1,5 +1,9 @@
 # python_web_server_template
 
+## Configuration
+
+For all available configuration see [AppConfigs](/app/config/__init__.py) class.
+
 ## Logging
 
 This project uses Python `logging` library for logging.

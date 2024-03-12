@@ -22,6 +22,10 @@ class AppConfigs(BaseModel):
 
     log_level: str = "INFO"
     log_file_path: Path = get_default_log_file_path()
+    # time | log level | logger name | trace id | process id | thread id | message
+    # %(levelname)8s: max 8 characters for "CRITICAL"
+    # ref: https://docs.python.org/3/library/logging.html#logrecord-attributes
+    log_format: str = "%(asctime)s|%(levelname)-8s|%(name)s|%(correlation_id)s|%(process)d|%(thread)d| %(message)s"
 
     @field_validator("log_file_path")
     @classmethod

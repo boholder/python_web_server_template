@@ -11,7 +11,7 @@ def configure_uvicorn_logging():
     for handler in LOGGING_CONFIG["handlers"].values():
         handler["filters"] = handler["filters"] + extra_filters if "filters" in handler else extra_filters
     for formatter in LOGGING_CONFIG["formatters"].values():
-        formatter["fmt"] = log_config.LOG_FORMAT_PATTERN
+        formatter["fmt"] = config.CONFIG.log_format
 
     file_handler_name = "file_handler"
     LOGGING_CONFIG["handlers"][file_handler_name] = log_config.get_file_handler_config()

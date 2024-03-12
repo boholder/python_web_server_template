@@ -6,11 +6,6 @@ from asgi_correlation_id import CorrelationIdFilter
 
 from app import config
 
-# time | log level | logger name | trace id | process id | thread id | message
-# %(levelname)8s: max 8 characters for "CRITICAL"
-# ref: https://docs.python.org/3/library/logging.html#logrecord-attributes
-LOG_FORMAT_PATTERN = "%(asctime)s|%(levelname)-8s|%(name)s|%(correlation_id)s|%(process)d|%(thread)d| %(message)s"
-
 TRACE_ID_FILTER = CorrelationIdFilter(name="trace_id_filter", uuid_length=16, default_value="-")
 
 
@@ -34,7 +29,7 @@ def configure_app_logging(file_handler: logging.Handler | None = None) -> None:
     console_handler = logging.StreamHandler()
     console_handler.addFilter(TRACE_ID_FILTER)
     logging.basicConfig(
-        handlers=[console_handler, file_handler], level=config.CONFIG.log_level, format=LOG_FORMAT_PATTERN
+        handlers=[console_handler, file_handler], level=config.CONFIG.log_level, format=config.CONFIG.log_format
     )
 
 
