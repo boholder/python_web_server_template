@@ -36,6 +36,7 @@ distribution = false
 dev = "python app/main.py --debug"
 test = "pytest"
 lint = "pre-commit run --all-files"
+a = { composite = ["lint", "test"] }
 
 [tool.pytest.ini_options]
 pythonpath = ["app", "tests"]

@@ -1,5 +1,6 @@
 # Shamelessly copied from https://github.com/pdm-project/pdm/blob/main/.pre-commit-config.yaml
 # Thank you PDM!
+# See [tool.ruff] part in pyproject.toml for detailed configuration.
 
 ci:
   autoupdate_schedule: monthly
