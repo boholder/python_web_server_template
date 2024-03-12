@@ -14,7 +14,7 @@ def configure_uvicorn_logging():
         formatter["fmt"] = log_config.LOG_FORMAT_PATTERN
 
     file_handler_name = "file_handler"
-    LOGGING_CONFIG["handlers"][file_handler_name] = log_config.FILE_HANDLER_CONFIG
+    LOGGING_CONFIG["handlers"][file_handler_name] = log_config.get_file_handler_config()
 
     # There are three loggers in uvicorn default logging config: "uvicorn", "uvicorn.access", "uvicorn.error".
     # We need to add "file_handler" to logger "uvicorn" and "uvicorn.access"
@@ -25,6 +25,6 @@ def configure_uvicorn_logging():
 
 
 if __name__ == "__main__":
-    config.configure_debug_mode()
+    config.configure_app()
     configure_uvicorn_logging()
     uvicorn.run("application:APP", port=8000, reload=config.CONFIG.debug_mode)
