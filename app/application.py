@@ -13,22 +13,27 @@ from app.routers import demo
 log: logging.Logger
 
 
-@asynccontextmanager
-async def lifespan(_: FastAPI):
+async def _on_app_start():
     config.configure_app()
-
     # We must configure app logging after uvicorn started,
     # thus the file handler should exist for reusing.
     log_config.configure_app_logging()
-
     global log
     log = logging.getLogger(__name__)
     log.info(f"Starting application with following configuration: {config.CONFIG}")
+
+
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    await _on_app_start()
     yield
 
 
 APP = FastAPI(lifespan=lifespan)
 APP.include_router(demo.router)
+# noinspection PyTypeChecker
+# Since CorrelationIdMiddleware isn't a fastapi specific middleware,
+# its type is not fit fastapi type.
 APP.add_middleware(CorrelationIdMiddleware)
 
 

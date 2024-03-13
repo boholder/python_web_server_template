@@ -5,7 +5,7 @@ from app import config
 from app.config import log_config
 
 
-def configure_uvicorn_logging():
+def _configure_uvicorn_logging():
     """Must configure the uvicorn.config.LOGGING_CONFIG within the same module that runs uvicorn.run()."""
     extra_filters = [log_config.TRACE_ID_FILTER]
     for handler in LOGGING_CONFIG["handlers"].values():
@@ -26,7 +26,7 @@ def configure_uvicorn_logging():
 
 def main():
     config.configure_app()
-    configure_uvicorn_logging()
+    _configure_uvicorn_logging()
     uvicorn.run("app.application:APP", port=config.CONFIG.port, reload=config.CONFIG.debug_mode)
 
 

@@ -56,13 +56,13 @@ def get_command_args(args: list[str] | None = None) -> argparse.Namespace:
 def configure_app():
     args = get_command_args()
 
-    if config_file_path := load_config_file_if_passed(args):
+    if config_file_path := _load_config_file_if_passed(args):
         configure_app_with(config_file_path)
 
     configure_debug_mode(args)
 
 
-def load_config_file_if_passed(args: argparse.Namespace) -> Path | None:
+def _load_config_file_if_passed(args: argparse.Namespace) -> Path | None:
     if cfg_path := args.config:
         abs_path = Path.resolve(Path(cfg_path))
         return abs_path
