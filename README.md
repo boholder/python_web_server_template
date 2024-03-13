@@ -31,6 +31,15 @@ for using X-Request-ID HTTP header or self-generated uuid as trace id of request
 This project uses [pre-commit](https://pre-commit.com/) to run linters (ruff) and formatters (pyupgrade, ruff-format, codespell),
 for more details see [.pre-commit-config.yaml](.pre-commit-config.yaml).
 
+There are few pre-defined [development scripts](pyproject.toml) under `[tool.pdm.scripts]` section:
+* `dev` - start the development server
+* `lint` - run pre-commit (start linters and formatters)
+* `test` - run tests
+* `a` - `lint` then `test`, please constantly execute it while developing
+
+You can build the project into executable library with `pdm build` command, then type `python app` to start it, 
+or `pdm install` to install it then run it with `myapp` [console script](https://pdm-project.org/latest/reference/pep621/#console-scripts). 
+
 ## Test APIs
 
 ```shell
