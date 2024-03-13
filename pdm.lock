@@ -5,7 +5,7 @@
 groups = ["default", "test", "http"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:b8e855922f9447c70d41036535c1e5a3b688569131537fd9f5e7ff64216a02ef"
+content_hash = "sha256:361df3d4f465c0507d90632a5f9574ce24356557f1c863e8d13cc510b00aefb9"
 
 [[package]]
 name = "annotated-types"
@@ -181,6 +181,50 @@ groups = ["test"]
 files = [
     {file = "iniconfig-2.0.0-py3-none-any.whl", hash = "sha256:b6a85871a79d2e3b22d2d1b94ac2824226a63c6b741c88f7ae975f18b6778374"},
     {file = "iniconfig-2.0.0.tar.gz", hash = "sha256:2d91e135bf72d31a410b17c16da610a82cb55f6b0477d1a902134b24a455b8b3"},
+]
+
+[[package]]
+name = "nacos-sdk-rust-binding-py"
+version = "0.3.5"
+requires_python = ">=3.7"
+summary = "nacos-sdk-rust binding for Python."
+groups = ["default"]
+files = [
+    {file = "nacos_sdk_rust_binding_py-0.3.5-cp311-cp311-macosx_10_12_x86_64.whl", hash = "sha256:897925677f4a67097d2984a774bf9712ac144f6f5466025d70fef1ea78c21a74"},
+    {file = "nacos_sdk_rust_binding_py-0.3.5-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:09f8e67159e68f31613bd00b96c874699e887d1728068755afcbd2596342b632"},
+    {file = "nacos_sdk_rust_binding_py-0.3.5-cp311-cp311-manylinux_2_12_i686.manylinux2010_i686.whl", hash = "sha256:872ac3fc93003863311c80237d90500d70f27a062822d0f1d1992b42f6825454"},
+    {file = "nacos_sdk_rust_binding_py-0.3.5-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:63ecdaf4f4bc2968a88ab78fb1c419cfab92217ee2bc94cadd09b5d19cabb877"},
+    {file = "nacos_sdk_rust_binding_py-0.3.5-cp311-cp311-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:43112f43e7ff99c5e8129daeee9dc377df942ae7e0b840d682c56bbb6c834ad5"},
+    {file = "nacos_sdk_rust_binding_py-0.3.5-cp311-cp311-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:192dfd0310ddd55ef32b3304739bde617d6bd43cba467751f780c3f218f80271"},
+    {file = "nacos_sdk_rust_binding_py-0.3.5-cp311-cp311-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:52bfef67a950b23366d67b29bbac2df4ca34628c9d07f576898166d98298d577"},
+    {file = "nacos_sdk_rust_binding_py-0.3.5-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:b83926e548a4f19da0813cc3671a0d3cdafc8bda0b6454fa55680be8cbff2c56"},
+    {file = "nacos_sdk_rust_binding_py-0.3.5-cp311-none-win32.whl", hash = "sha256:ce465268d6dc59143b023024edddc7498974db6b1f39b46adb63d5676cec5159"},
+    {file = "nacos_sdk_rust_binding_py-0.3.5-cp311-none-win_amd64.whl", hash = "sha256:f66ac6ca8187f3f4d2d6acb546fb3fd39111d875b515f658459e2689d6e00693"},
+    {file = "nacos_sdk_rust_binding_py-0.3.5-pp310-pypy310_pp73-manylinux_2_12_i686.manylinux2010_i686.whl", hash = "sha256:312099041618dbf6ba3c8e4936ea78b578adfac4f9f1d88d79101bd18dc6879a"},
+    {file = "nacos_sdk_rust_binding_py-0.3.5-pp310-pypy310_pp73-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:dcaa2a008c71f9ed57db0203235fb36c330e1e335029ab49e1a92f06e15c939f"},
+    {file = "nacos_sdk_rust_binding_py-0.3.5-pp310-pypy310_pp73-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:5153190e5c5b445e3f9aa02a9829df21672ddb37d8bb66d66b0d0458a5cb2050"},
+    {file = "nacos_sdk_rust_binding_py-0.3.5-pp310-pypy310_pp73-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:14eb7da3a1bd150b91072b20b0595e0ca73b6112d5c5e7440dcc8e5135116266"},
+    {file = "nacos_sdk_rust_binding_py-0.3.5-pp310-pypy310_pp73-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:8fa85448e7c9f9081736c8b28e8c0e57bfa02ad5f57d5a56bc5eb36d7ef3a18c"},
+    {file = "nacos_sdk_rust_binding_py-0.3.5-pp310-pypy310_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:775c477ad4e7045722fffc3ce972c7fd64a4adbf4e51edddb34984ef67200773"},
+    {file = "nacos_sdk_rust_binding_py-0.3.5-pp37-pypy37_pp73-manylinux_2_12_i686.manylinux2010_i686.whl", hash = "sha256:7d05ca92d13d1e98229adc85c4097aa0832b3c90276605c7c7b95df0f004545a"},
+    {file = "nacos_sdk_rust_binding_py-0.3.5-pp37-pypy37_pp73-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:580bea8027d8f126e1611693a1fa18510ec4aa31bde24961606243e1d0ee5d1e"},
+    {file = "nacos_sdk_rust_binding_py-0.3.5-pp37-pypy37_pp73-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:21d205c70942edc659c43f4fa03c3e846f09c49f1c260a6feef5dbab25b17175"},
+    {file = "nacos_sdk_rust_binding_py-0.3.5-pp37-pypy37_pp73-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:ed50e39eda3b920a660cdda1de462c8de725977b8780de71203617026ec33ff8"},
+    {file = "nacos_sdk_rust_binding_py-0.3.5-pp37-pypy37_pp73-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:485f83f59550f1fc94de4dbe36ecc9a3c48452e31ae71e57394e58b17269bec3"},
+    {file = "nacos_sdk_rust_binding_py-0.3.5-pp37-pypy37_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:37a82b64cb6b3211f62e082d116ce3bd1c422bb9e03c3f4b468a6b5e5ef73393"},
+    {file = "nacos_sdk_rust_binding_py-0.3.5-pp38-pypy38_pp73-manylinux_2_12_i686.manylinux2010_i686.whl", hash = "sha256:76b536b443e8d35d874b52094e35d9020f7f336c94796bb8c0316056c1bc978f"},
+    {file = "nacos_sdk_rust_binding_py-0.3.5-pp38-pypy38_pp73-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:abc0e2ed59fa34c4cb881150ea3115d8e7b985f59e463a98c464d8f8b14543fc"},
+    {file = "nacos_sdk_rust_binding_py-0.3.5-pp38-pypy38_pp73-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:e8ecaaafc2e72f79043362c07f28e91596de7fff4709a26a999c5b21a0d81700"},
+    {file = "nacos_sdk_rust_binding_py-0.3.5-pp38-pypy38_pp73-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:73380f1b74c09a483978d9ed13f073b5fcaeb05f764e580526360621963ad881"},
+    {file = "nacos_sdk_rust_binding_py-0.3.5-pp38-pypy38_pp73-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:9b091f58974edb71e4990458330d96a42934032f63564426fe2e88e215f8622b"},
+    {file = "nacos_sdk_rust_binding_py-0.3.5-pp38-pypy38_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:08de868838b10bcef83ffa8b51dde2c87343ab1855ee41d95079ba5e252f9c51"},
+    {file = "nacos_sdk_rust_binding_py-0.3.5-pp39-pypy39_pp73-manylinux_2_12_i686.manylinux2010_i686.whl", hash = "sha256:c82131befa627f7f746d5e7a591823bfa7a38a6c0b9af8e7f3bf5a32d80b10bf"},
+    {file = "nacos_sdk_rust_binding_py-0.3.5-pp39-pypy39_pp73-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:1a2c9fca65312d82f54bf7f7c793931343a4368eec66108b2da67c63f8a8dbcb"},
+    {file = "nacos_sdk_rust_binding_py-0.3.5-pp39-pypy39_pp73-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:e61aadc6e3a25839847382eb8700f16af4c2b5c7684ba2158766ed72e3dac73d"},
+    {file = "nacos_sdk_rust_binding_py-0.3.5-pp39-pypy39_pp73-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:e35a460996337c218fc9c3d547c6f96304e8340229f34655cb9c1dd94878a33e"},
+    {file = "nacos_sdk_rust_binding_py-0.3.5-pp39-pypy39_pp73-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:338da13dea1acfb2b631e1990134fa2233b6508536e9d22f99ee340690f2d38b"},
+    {file = "nacos_sdk_rust_binding_py-0.3.5-pp39-pypy39_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:e5e4e7f201d54fe51a080685f92f87c3e9e7cc1a0474b36588ad1dd08f9d04ac"},
+    {file = "nacos_sdk_rust_binding_py-0.3.5.tar.gz", hash = "sha256:db49d3de3f7eeab3f6240e6aa4b2b9533303bd905e170d59eb8770977ee11caf"},
 ]
 
 [[package]]
