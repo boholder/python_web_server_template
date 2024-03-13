@@ -17,6 +17,7 @@ dependencies = [
     "asgi-correlation-id>=4.3.1",
     # For config file parsing
     "pyyaml>=6.0.1",
+    # For data object parsing
     "pydantic>=2.6.3",
 ]
 requires-python = "==3.11.*"
