@@ -30,11 +30,11 @@ test = [
 ]
 
 [tool.pdm]
-distribution = false
+distribution = true
 
 # Scripts for development
 [tool.pdm.scripts]
-dev = "python app/main.py --debug"
+dev = "python app --debug -c ./app_config.yaml"
 test = "pytest"
 lint = "pre-commit run --all-files"
 a = { composite = ["lint", "test"] }
@@ -72,3 +72,6 @@ max-complexity = 10
 
 [tool.ruff.lint.isort]
 known-first-party = ["app"]
+
+[project.scripts]
+myapp = "app.__main__:main"

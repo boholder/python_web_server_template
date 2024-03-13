@@ -13,7 +13,7 @@ For all available configuration see [AppConfigs](/app/config/__init__.py) class.
 ## Logging
 
 This project uses Python `logging` library for logging.
-It [configures](/app/main.py) uvicorn loggers for a uniform logging format and save logs to file.
+It [configures](/app/__main__.py) uvicorn loggers for a uniform logging format and save logs to file.
 
 It [adds](/app/config/log_config.py) a [RotateFileHandler](https://docs.python.org/3/library/logging.handlers.html#logging.handlers.RotatingFileHandler) for log persistence,
 and registers this handler to the uvicorn loggers (through configuring `uvicorn.config.LOGGING_CONFIG`) and custom loggers (through `logging.basicConfig()`).

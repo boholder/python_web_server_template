@@ -24,7 +24,11 @@ def configure_uvicorn_logging():
             logger["handlers"] += [file_handler_name]
 
 
-if __name__ == "__main__":
+def main():
     config.configure_app()
     configure_uvicorn_logging()
-    uvicorn.run("application:APP", port=config.CONFIG.port, reload=config.CONFIG.debug_mode)
+    uvicorn.run("app.application:APP", port=config.CONFIG.port, reload=config.CONFIG.debug_mode)
+
+
+if __name__ == "__main__":
+    main()
