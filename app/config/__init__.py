@@ -1,5 +1,4 @@
 import argparse
-import os
 import sys
 from pathlib import Path
 
@@ -8,10 +7,9 @@ from pydantic import BaseModel, field_validator
 
 
 def get_default_log_file_path() -> Path:
-    """~/logs/app.log"""
+    """./app.log"""
 
-    home = os.path.expanduser("~")
-    return Path(home + "/logs/app.log").absolute()
+    return Path("./app.log").absolute()
 
 
 # noinspection PyNestedDecorators
@@ -33,9 +31,8 @@ class AppConfigs(BaseModel):
     def post_log_file_path(cls, v: Path) -> Path:
         # Resolve path to absolute
         v = v.absolute()
-        # Create parent directory if it's not default log path and it doesn't exist
-        if v != get_default_log_file_path():
-            v.parent.mkdir(exist_ok=True, parents=True)
+        # Create parent directory if not exist
+        v.parent.mkdir(exist_ok=True, parents=True)
         return v
 
     debug_mode: bool = False

@@ -21,6 +21,8 @@ Please [note](/app/config/log_config.py) that this project reuses the file handl
 and use it on its own logging configuration,
 by this way we can avoid creating two file logging handlers for one same file.
 
+The default log file path is `./app.log`, you can change it in the config file with `app.log_file_path` option.
+
 ## CI
 
 This project uses [pre-commit](https://pre-commit.com/) to run linters (ruff) and formatters (pyupgrade, ruff-format, codespell),
