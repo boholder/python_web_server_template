@@ -31,15 +31,15 @@ async def lifespan(_: FastAPI):
     yield
 
 
-APP = FastAPI(lifespan=lifespan)
-APP.include_router(demo.router)
+FASTAPI_APP = FastAPI(lifespan=lifespan)
+FASTAPI_APP.include_router(demo.router)
 # noinspection PyTypeChecker
 # Since CorrelationIdMiddleware isn't a fastapi specific middleware,
 # its type is not fit fastapi type.
-APP.add_middleware(CorrelationIdMiddleware)
+FASTAPI_APP.add_middleware(CorrelationIdMiddleware)
 
 
-@APP.exception_handler(Exception)
+@FASTAPI_APP.exception_handler(Exception)
 async def unhandled_exception_handler(request: Request, exc: Exception) -> Response:
     """
     ref: https://github.com/snok/asgi-correlation-id?tab=readme-ov-file#fastapi-1
