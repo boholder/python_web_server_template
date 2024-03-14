@@ -30,10 +30,19 @@ class AppConfigs(BaseModel):
         return v
 
     debug_mode: bool = False
+    enable_nacos: bool = False
+
+
+class NacosConfigs(BaseModel):
+    """Configurations for nacos client"""
 
 
 class Configs(BaseModel):
+    """Represents all configuration, provides unified access to configuration values."""
+
     app: AppConfigs = AppConfigs()
+    # Only exists when app.enable_nacos is True
+    nacos: NacosConfigs = None
 
 
 # Global configuration object

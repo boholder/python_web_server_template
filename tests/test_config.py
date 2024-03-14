@@ -12,7 +12,7 @@ def test_command_args_parsing(tmp_path, gen_config_file):
     assert args.debug is True
 
 
-def test_config_file_loading(tmp_path, gen_config_file):
+def test_loading_app_configs_from_config_file(tmp_path, gen_config_file):
     # this directory is not created by the test logic
     log_dir = tmp_path.joinpath("log_dir")
     log_file_path = log_dir.joinpath("app.log")
@@ -32,6 +32,16 @@ def test_config_file_loading(tmp_path, gen_config_file):
     assert config.CONFIG.app.log_file_path == log_file_path.absolute()
     assert config.CONFIG.app.log_format == log_format
     assert config.CONFIG.app.port == port
+
+    assert config.CONFIG.nacos is None
+
+
+def test_loading_nacos_configs_from_config_file(tmp_path, gen_config_file):
+    config_file = gen_config_file({"app": {"enable_nacos": True}, "nacos": {}})
+
+    config.configure_app_with(config_file)
+
+    assert config.CONFIG.nacos is not None
 
 
 def test_debug_mode(tmp_path, gen_config_file):
