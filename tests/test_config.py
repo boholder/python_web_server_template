@@ -25,16 +25,16 @@ def test_config_file_loading(tmp_path, gen_config_file):
 
     config.configure_app_with(config_file)
 
-    assert config.CONFIG.log_level == "ERROR"
+    assert config.CONFIG.app.log_level == "ERROR"
     # check if log_dir is created automatically
     assert os.path.isdir(log_dir)
     # check if log_file_path is transformed to absolute
-    assert config.CONFIG.log_file_path == log_file_path.absolute()
-    assert config.CONFIG.log_format == log_format
-    assert config.CONFIG.port == port
+    assert config.CONFIG.app.log_file_path == log_file_path.absolute()
+    assert config.CONFIG.app.log_format == log_format
+    assert config.CONFIG.app.port == port
 
 
 def test_debug_mode(tmp_path, gen_config_file):
     args = config.get_command_args(["--debug"])
     config.configure_debug_mode(args)
-    assert config.CONFIG.debug_mode is True
+    assert config.CONFIG.app.debug_mode is True

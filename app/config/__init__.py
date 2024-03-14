@@ -38,10 +38,14 @@ class AppConfigs(BaseModel):
     debug_mode: bool = False
 
 
+class Configs(BaseModel):
+    app: AppConfigs = AppConfigs()
+
+
 # Global configuration object
 # initialize with default values
 # Make sure to use "config.CONFIG.xxx" to access it, so it can retrieve newly updated values
-CONFIG: AppConfigs = AppConfigs()
+CONFIG: Configs = Configs()
 
 ARG_PARSER = argparse.ArgumentParser(description="Web Server")
 ARG_PARSER.add_argument("-c", "--config", help="Path of the config file", type=Path)
@@ -73,7 +77,7 @@ def configure_app_with(config_file_path: Path):
     with open(config_file_path, encoding="utf-8") as f:
         file_content = yaml.safe_load(f)
 
-    parsed = AppConfigs.model_validate(file_content["app"])
+    parsed = Configs.model_validate(file_content)
     global CONFIG
     CONFIG = parsed
 
@@ -81,5 +85,5 @@ def configure_app_with(config_file_path: Path):
 def configure_debug_mode(args: argparse.Namespace):
     if args.debug:
         global CONFIG
-        CONFIG.debug_mode = True
-        CONFIG.log_level = "DEBUG"
+        CONFIG.app.debug_mode = True
+        CONFIG.app.log_level = "DEBUG"

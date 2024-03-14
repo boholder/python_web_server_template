@@ -15,7 +15,7 @@ def get_file_handler_config() -> dict:
         "formatter": "default",
         # ref: https://docs.python.org/3/library/logging.handlers.html#timedrotatingfilehandler
         "class": "logging.handlers.TimedRotatingFileHandler",
-        "filename": config.CONFIG.log_file_path,
+        "filename": config.CONFIG.app.log_file_path,
         "when": "midnight",
         "backupCount": 7,
         "encoding": "utf-8",
@@ -29,7 +29,7 @@ def configure_app_logging(file_handler: logging.Handler | None = None) -> None:
     console_handler = logging.StreamHandler()
     console_handler.addFilter(TRACE_ID_FILTER)
     logging.basicConfig(
-        handlers=[console_handler, file_handler], level=config.CONFIG.log_level, format=config.CONFIG.log_format
+        handlers=[console_handler, file_handler], level=config.CONFIG.app.log_level, format=config.CONFIG.app.log_format
     )
 
 

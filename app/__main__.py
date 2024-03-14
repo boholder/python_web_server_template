@@ -11,7 +11,7 @@ def _configure_uvicorn_logging():
     for handler in LOGGING_CONFIG["handlers"].values():
         handler["filters"] = handler["filters"] + extra_filters if "filters" in handler else extra_filters
     for formatter in LOGGING_CONFIG["formatters"].values():
-        formatter["fmt"] = config.CONFIG.log_format
+        formatter["fmt"] = config.CONFIG.app.log_format
 
     file_handler_name = "file_handler"
     LOGGING_CONFIG["handlers"][file_handler_name] = log_config.get_file_handler_config()
@@ -27,7 +27,7 @@ def _configure_uvicorn_logging():
 def main():
     config.configure_app()
     _configure_uvicorn_logging()
-    uvicorn.run("app.application:APP", port=config.CONFIG.port, reload=config.CONFIG.debug_mode)
+    uvicorn.run("app.application:APP", port=config.CONFIG.app.port, reload=config.CONFIG.app.debug_mode)
 
 
 if __name__ == "__main__":
