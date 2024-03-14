@@ -10,16 +10,27 @@ from pydantic import BaseModel, field_validator
 # to suppress false positive on overlapping decorators
 # ref: https://youtrack.jetbrains.com/issue/PY-34368
 class AppConfigs(BaseModel):
-    """Contains the configuration for this application."""
+    """Configuration for this application."""
 
     name: str = "app"
+    """The application name, will be used when registering onto some services"""
+    host: str = "0.0.0.0"
+    """The host to listen on"""
     port: int = 8000
+    """The port to listen on"""
     log_level: str = "INFO"
+    """Log level of application logs"""
     log_file_path: Path = Path("./app.log").absolute()
+    """Path of ALL logs (including uvicorn)"""
     # time | log level | logger name | trace id | process id | thread id | message
     # %(levelname)8s: max 8 characters for "CRITICAL"
     # ref: https://docs.python.org/3/library/logging.html#logrecord-attributes
     log_format: str = "%(asctime)s|%(levelname)-8s|%(name)s|%(correlation_id)s|%(process)d|%(thread)d| %(message)s"
+    """Log format of ALL logs (including uvicorn)"""
+    debug_mode: bool = False
+    """When debug_mode is on, log level is set to DEBUG, uvicorn will reload when code changes"""
+    enable_nacos: bool = False
+    """Enable Nacos related features"""
 
     @field_validator("log_file_path")
     @classmethod
@@ -29,9 +40,6 @@ class AppConfigs(BaseModel):
         # Create parent directory if not exist
         v.parent.mkdir(exist_ok=True, parents=True)
         return v
-
-    debug_mode: bool = False
-    enable_nacos: bool = False
 
 
 class NacosConfigs(BaseModel):

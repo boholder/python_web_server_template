@@ -17,6 +17,7 @@ def test_loading_app_configs_from_config_file(tmp_path, gen_config_file):
     log_dir = tmp_path.joinpath("log_dir")
     log_file_path = log_dir.joinpath("app.log")
     log_format = "%(message)s"
+    host = "1.1.1.1"
     port = 1111
 
     config_file = gen_config_file(
@@ -26,6 +27,7 @@ def test_loading_app_configs_from_config_file(tmp_path, gen_config_file):
                 "log_level": "ERROR",
                 "log_file_path": str(log_file_path),
                 "log_format": log_format,
+                "host": host,
                 "port": port,
             }
         }
@@ -40,6 +42,7 @@ def test_loading_app_configs_from_config_file(tmp_path, gen_config_file):
     # check if log_file_path is transformed to absolute
     assert config.CONFIG.app.log_file_path == log_file_path.absolute()
     assert config.CONFIG.app.log_format == log_format
+    assert config.CONFIG.app.host == host
     assert config.CONFIG.app.port == port
 
     assert config.CONFIG.nacos is None
