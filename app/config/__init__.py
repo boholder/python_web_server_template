@@ -6,12 +6,6 @@ import yaml
 from pydantic import BaseModel, field_validator
 
 
-def get_default_log_file_path() -> Path:
-    """./app.log"""
-
-    return Path("./app.log").absolute()
-
-
 # noinspection PyNestedDecorators
 # to suppress false positive on overlapping decorators
 # ref: https://youtrack.jetbrains.com/issue/PY-34368
@@ -20,7 +14,7 @@ class AppConfigs(BaseModel):
 
     port: int = 8000
     log_level: str = "INFO"
-    log_file_path: Path = get_default_log_file_path()
+    log_file_path: Path = Path("./app.log").absolute()
     # time | log level | logger name | trace id | process id | thread id | message
     # %(levelname)8s: max 8 characters for "CRITICAL"
     # ref: https://docs.python.org/3/library/logging.html#logrecord-attributes
