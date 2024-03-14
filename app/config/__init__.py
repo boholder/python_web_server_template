@@ -12,6 +12,7 @@ from pydantic import BaseModel, field_validator
 class AppConfigs(BaseModel):
     """Contains the configuration for this application."""
 
+    name: str = "app"
     port: int = 8000
     log_level: str = "INFO"
     log_file_path: Path = Path("./app.log").absolute()

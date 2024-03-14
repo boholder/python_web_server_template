@@ -20,11 +20,20 @@ def test_loading_app_configs_from_config_file(tmp_path, gen_config_file):
     port = 1111
 
     config_file = gen_config_file(
-        {"app": {"log_level": "ERROR", "log_file_path": str(log_file_path), "log_format": log_format, "port": port}}
+        {
+            "app": {
+                "name": "app",
+                "log_level": "ERROR",
+                "log_file_path": str(log_file_path),
+                "log_format": log_format,
+                "port": port,
+            }
+        }
     )
 
     config.configure_app_with(config_file)
 
+    assert config.CONFIG.app.name == "app"
     assert config.CONFIG.app.log_level == "ERROR"
     # check if log_dir is created automatically
     assert os.path.isdir(log_dir)
