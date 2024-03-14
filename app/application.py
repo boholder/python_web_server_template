@@ -6,7 +6,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.exception_handlers import http_exception_handler
 from starlette.responses import Response
 
-from app import config
+from app import config, nacos
 from app.config import log_config
 from app.routers import demo
 
@@ -20,7 +20,9 @@ async def _on_app_start():
     log_config.configure_app_logging()
     global log
     log = logging.getLogger(__name__)
-    log.info(f"Starting application with following configuration: {config.CONFIG}")
+    log.debug(f"Starting application with following configuration: {config.CONFIG}")
+
+    nacos.register_onto_nacos()
 
 
 @asynccontextmanager
