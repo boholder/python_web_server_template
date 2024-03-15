@@ -17,11 +17,10 @@ def gen_config_file(tmp_path):
 
 
 @pytest.fixture
-def configure_with(gen_config_file):
+def configure_with():
     """Configure the app with the given config."""
 
     def wrapper(content: dict):
-        f = gen_config_file(content)
-        config.configure_app_with(f)
+        config.configure_app_with(content)
 
     return wrapper

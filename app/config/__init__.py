@@ -128,12 +128,18 @@ def _load_config_file_if_passed(args: argparse.Namespace) -> Path | None:
         return abs_path
 
 
-def configure_app_with(config_file_path: Path):
-    file_content: dict
-    with open(config_file_path, encoding="utf-8") as f:
-        file_content = yaml.safe_load(f)
+def configure_app_with(config_file: Path | dict):
+    parsed: Configs | None = None
 
-    parsed = Configs.model_validate(file_content)
+    if isinstance(config_file, Path):
+        file_content: dict
+        with open(config_file, encoding="utf-8") as f:
+            file_content = yaml.safe_load(f)
+            parsed = Configs.model_validate(file_content)
+
+    elif isinstance(config_file, dict):
+        parsed = Configs.model_validate(config_file)
+
     global CONFIG
     CONFIG = parsed
 
