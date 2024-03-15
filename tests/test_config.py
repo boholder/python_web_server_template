@@ -26,6 +26,8 @@ def test_loading_app_configs_from_config_file(tmp_path, gen_config_file):
     log_format = "%(message)s"
     host = "1.1.1.1"
     port = 1111
+    outer_host = "2.2.2.2"
+    outer_port = 2222
 
     config_file = gen_config_file(
         {
@@ -36,6 +38,8 @@ def test_loading_app_configs_from_config_file(tmp_path, gen_config_file):
                 "log_format": log_format,
                 "host": host,
                 "port": port,
+                "outer_host": outer_host,
+                "outer_port": outer_port,
             }
         }
     )
@@ -51,12 +55,14 @@ def test_loading_app_configs_from_config_file(tmp_path, gen_config_file):
     assert config.CONFIG.app.log_format == log_format
     assert config.CONFIG.app.host == host
     assert config.CONFIG.app.port == port
+    assert config.CONFIG.app.outer_host == outer_host
+    assert config.CONFIG.app.outer_port == outer_port
 
     assert config.CONFIG.nacos is None
 
 
 def test_not_load_nacos_config_if_not_enabled(tmp_path, gen_config_file):
-    config_file = gen_config_file({"app": {"enable_nacos": False}, "nacos": {}})
+    config_file = gen_config_file({"app": {"enable_nacos": False}, "nacos": {"server_addr": ""}})
 
     config.configure_app_with(config_file)
 

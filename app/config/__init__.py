@@ -13,11 +13,15 @@ class AppConfigs(BaseModel):
     """Configuration for this application."""
 
     name: str = "app"
-    """The application name, will be used when registering onto some services"""
+    """The application name, will be used when registering onto services"""
     host: str = "0.0.0.0"
     """The host to listen on"""
     port: int = 8000
     """The port to listen on"""
+    outer_host: str = "0.0.0.0"
+    """The host that outer services wound use to call this application, will be used when registering onto services"""
+    outer_port: int = 8000
+    """The port that outer services wound use to call this application, will be used when registering onto services"""
     log_level: str = "INFO"
     """Log level of application logs"""
     log_file_path: Path = Path("./app.log").absolute()
