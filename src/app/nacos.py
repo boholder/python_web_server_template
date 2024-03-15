@@ -10,7 +10,7 @@ _NACOS_SERVICE_INSTANCE: nacos.NacosServiceInstance
 log = logging.getLogger(__name__)
 
 
-def register_onto_nacos():
+async def register_onto_nacos():
     build_nacos_client()
     build_nacos_service_instance()
 

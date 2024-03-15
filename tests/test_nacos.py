@@ -1,4 +1,5 @@
 import nacos_sdk_rust_binding_py as nacos_client
+import pytest
 
 from app import config, nacos
 
@@ -41,10 +42,11 @@ def test_build_service_instance(configure_with):
     assert nacos._NACOS_SERVICE_INSTANCE.port == DEFAULT_APP_CONFIG.outer_port
 
 
-def test_register_onto_nacos(configure_with, mock_nacos_client):
+@pytest.mark.asyncio(scope="function")
+async def test_register_onto_nacos(configure_with, mock_nacos_client):
     configure_with({"app": {"enable_nacos": True}, "nacos": {"server_addr": "", "enable_auth": True}})
 
-    nacos.register_onto_nacos()
+    await nacos.register_onto_nacos()
 
     actual_kwargs = mock_nacos_client.register_instance.call_args.kwargs
     assert actual_kwargs["service_name"] == DEFAULT_APP_CONFIG.name
