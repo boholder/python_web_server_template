@@ -1,0 +1,9 @@
+app:
+  log_level: DEBUG
+  log_file_path: dist/app.log
+  enable_nacos: true
+nacos:
+  server_addr: 127.0.0.1:8848
+  enable_auth: true
+  username: nacos
+  password: nacos

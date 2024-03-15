@@ -43,7 +43,7 @@ source-includes = ["tests", "LICENSE", "README.md"]
 
 # Scripts for development
 [tool.pdm.scripts]
-dev = "python src/app/__main__.py --debug -c ./app_config.yaml"
+dev = "python src/app/__main__.py --debug -c ./src/resources/app_config.yaml"
 test = "pytest"
 lint = "pre-commit run --all-files"
 a = { composite = ["lint", "test"] }

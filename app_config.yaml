@@ -1,3 +1,0 @@
-app:
-  log_level: DEBUG
-  log_file_path: dist/app.log
