@@ -1,7 +1,6 @@
 import nacos_sdk_rust_binding_py as nacos_client
 
-import config
-from app import nacos
+from app import config, nacos
 
 DEFAULT_APP_CONFIG = config.AppConfigs()
 DEFAULT_NACOS_CONFIG = config.NacosConfigs(server_addr="", enable_auth=True)

@@ -34,15 +34,21 @@ test = [
 [tool.pdm]
 distribution = true
 
+[tool.pdm.build]
+excludes = ["./**/.git"]
+package-dir = "src"
+includes = ["src/app"]
+source-includes = ["tests", "LICENSE", "README.md"]
+
 # Scripts for development
 [tool.pdm.scripts]
-dev = "python app --debug -c ./app_config.yaml"
+dev = "python src/app/__main__.py --debug -c ./app_config.yaml"
 test = "pytest"
 lint = "pre-commit run --all-files"
 a = { composite = ["lint", "test"] }
 
 [tool.pytest.ini_options]
-pythonpath = ["app", "tests"]
+pythonpath = ["src", "tests"]
 testpaths = ["tests"]
 filterwarnings = [
     # This's a warning from httpx library, which is used in our unit tests:
