@@ -76,8 +76,8 @@ def test_not_load_nacos_auth_config_if_not_enabled(tmp_path, gen_config_file):
     config.configure_app_with(config_file)
 
     assert config.CONFIG.nacos.enable_auth is False
-    assert config.CONFIG.nacos.username != username
-    assert config.CONFIG.nacos.password != password
+    assert config.CONFIG.nacos.username is None
+    assert config.CONFIG.nacos.password is None
 
 
 def test_load_nacos_configs_from_config_file(tmp_path, gen_config_file):

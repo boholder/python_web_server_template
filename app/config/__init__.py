@@ -74,7 +74,7 @@ class NacosConfigs(BaseModel):
         if values.data["enable_auth"]:
             return value
         else:
-            return "nacos"
+            return None
 
 
 # noinspection PyNestedDecorators
