@@ -42,16 +42,56 @@ class AppConfigs(BaseModel):
         return v
 
 
+# noinspection PyNestedDecorators
 class NacosConfigs(BaseModel):
     """Configurations for nacos client"""
 
+    server_addr: str
+    """
+    The nacos server(s) address(es)
+    e.g. "127.0.0.1:8848"
+    the underlying "nacos-sdk-rust" library supports multiple server address since v0.2.1
+    e.g. "address:port[,address:port],...]"
+    ref: https://github.com/nacos-group/nacos-sdk-rust/blob/b8f0298822318beaae116fceff59f0c9fe245741/CHANGELOG.md?plain=1#L124C3-L124C51
+    """
+    enable_auth: bool = False
+    """Set it to same as nacos server configuration"""
+    username: str = "nacos"
+    """
+    username and password are used for authentication with nacos server,
+    only be set to nacos client when enable_auth is True.
+    "nacos" is default username/password of a new nacos server.
+    """
+    password: str = "nacos"
+    namespace: str = ""
+    """Leave it to "", the nacos server will register this service to default "public" namespace"""
+    group: str = ""
+    """Leave it to "", the nacos server will register this service to default "DEFAULT_GROUP" group"""
 
+    @field_validator("username", "password", mode="after")
+    @classmethod
+    def parse_auth_config_if_enabled(cls, value, values):
+        if values.data["enable_auth"]:
+            return value
+        else:
+            return "nacos"
+
+
+# noinspection PyNestedDecorators
 class Configs(BaseModel):
     """Represents all configuration, provides unified access to configuration values."""
 
     app: AppConfigs = AppConfigs()
     # Only exists when app.enable_nacos is True
-    nacos: NacosConfigs = None
+    nacos: NacosConfigs | None = None
+
+    @field_validator("nacos", mode="before")
+    @classmethod
+    def parse_nacos_config_if_enabled(cls, value, values):
+        if values.data["app"].enable_nacos:
+            return value
+        else:
+            return None
 
 
 # Global configuration object

@@ -12,6 +12,13 @@ def test_command_args_parsing(tmp_path, gen_config_file):
     assert args.debug is True
 
 
+def test_debug_mode(tmp_path, gen_config_file):
+    args = config.get_command_args(["--debug"])
+    config.configure_debug_mode(args)
+    assert config.CONFIG.app.debug_mode is True
+    assert config.CONFIG.app.log_level == "DEBUG"
+
+
 def test_loading_app_configs_from_config_file(tmp_path, gen_config_file):
     # this directory is not created by the test logic
     log_dir = tmp_path.joinpath("log_dir")
@@ -48,15 +55,57 @@ def test_loading_app_configs_from_config_file(tmp_path, gen_config_file):
     assert config.CONFIG.nacos is None
 
 
-def test_loading_nacos_configs_from_config_file(tmp_path, gen_config_file):
-    config_file = gen_config_file({"app": {"enable_nacos": True}, "nacos": {}})
+def test_not_load_nacos_config_if_not_enabled(tmp_path, gen_config_file):
+    config_file = gen_config_file({"app": {"enable_nacos": False}, "nacos": {}})
 
     config.configure_app_with(config_file)
 
-    assert config.CONFIG.nacos is not None
+    assert config.CONFIG.nacos is None
 
 
-def test_debug_mode(tmp_path, gen_config_file):
-    args = config.get_command_args(["--debug"])
-    config.configure_debug_mode(args)
-    assert config.CONFIG.app.debug_mode is True
+def test_not_load_nacos_auth_config_if_not_enabled(tmp_path, gen_config_file):
+    username = "user"
+    password = "pwd"
+    config_file = gen_config_file(
+        {
+            "app": {"enable_nacos": True},
+            "nacos": {"enable_auth": False, "server_addr": "", "username": username, "password": password},
+        }
+    )
+
+    config.configure_app_with(config_file)
+
+    assert config.CONFIG.nacos.enable_auth is False
+    assert config.CONFIG.nacos.username != username
+    assert config.CONFIG.nacos.password != password
+
+
+def test_load_nacos_configs_from_config_file(tmp_path, gen_config_file):
+    server_addr = "127.0.0.1:8848"
+    enable_auth = True
+    username = "user"
+    password = "pwd"
+    namespace = "ns"
+    group = "grp"
+    config_file = gen_config_file(
+        {
+            "app": {"enable_nacos": True},
+            "nacos": {
+                "server_addr": server_addr,
+                "enable_auth": enable_auth,
+                "username": username,
+                "password": password,
+                "namespace": namespace,
+                "group": group,
+            },
+        }
+    )
+
+    config.configure_app_with(config_file)
+
+    assert config.CONFIG.nacos.server_addr == server_addr
+    assert config.CONFIG.nacos.enable_auth == enable_auth
+    assert config.CONFIG.nacos.username == username
+    assert config.CONFIG.nacos.password == password
+    assert config.CONFIG.nacos.namespace == namespace
+    assert config.CONFIG.nacos.group == group
