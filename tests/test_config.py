@@ -3,7 +3,7 @@ import os.path
 from app import config
 
 
-def test_command_args_parsing(tmp_path, gen_config_file):
+def test_command_args_parsing(gen_config_file):
     config_file = gen_config_file({})
 
     args = config.get_command_args(["-c", str(config_file), "--debug"])
@@ -12,14 +12,14 @@ def test_command_args_parsing(tmp_path, gen_config_file):
     assert args.debug is True
 
 
-def test_debug_mode(tmp_path, gen_config_file):
+def test_debug_mode():
     args = config.get_command_args(["--debug"])
     config.configure_debug_mode(args)
     assert config.CONFIG.app.debug_mode is True
     assert config.CONFIG.app.log_level == "DEBUG"
 
 
-def test_loading_app_configs_from_config_file(tmp_path, gen_config_file):
+def test_loading_app_configs_from_config_file(tmp_path, configure_with):
     # this directory is not created by the test logic
     log_dir = tmp_path.joinpath("log_dir")
     log_file_path = log_dir.joinpath("app.log")
@@ -29,7 +29,7 @@ def test_loading_app_configs_from_config_file(tmp_path, gen_config_file):
     outer_host = "2.2.2.2"
     outer_port = 2222
 
-    config_file = gen_config_file(
+    configure_with(
         {
             "app": {
                 "name": "app",
@@ -43,8 +43,6 @@ def test_loading_app_configs_from_config_file(tmp_path, gen_config_file):
             }
         }
     )
-
-    config.configure_app_with(config_file)
 
     assert config.CONFIG.app.name == "app"
     assert config.CONFIG.app.log_level == "ERROR"
@@ -61,39 +59,36 @@ def test_loading_app_configs_from_config_file(tmp_path, gen_config_file):
     assert config.CONFIG.nacos is None
 
 
-def test_not_load_nacos_config_if_not_enabled(tmp_path, gen_config_file):
-    config_file = gen_config_file({"app": {"enable_nacos": False}, "nacos": {"server_addr": ""}})
-
-    config.configure_app_with(config_file)
-
+def test_not_load_nacos_config_if_not_enabled(configure_with):
+    configure_with({"app": {"enable_nacos": False}, "nacos": {"server_addr": ""}})
     assert config.CONFIG.nacos is None
 
 
-def test_not_load_nacos_auth_config_if_not_enabled(tmp_path, gen_config_file):
+def test_not_load_nacos_auth_config_if_not_enabled(configure_with):
     username = "user"
     password = "pwd"
-    config_file = gen_config_file(
+
+    configure_with(
         {
             "app": {"enable_nacos": True},
             "nacos": {"enable_auth": False, "server_addr": "", "username": username, "password": password},
         }
     )
 
-    config.configure_app_with(config_file)
-
     assert config.CONFIG.nacos.enable_auth is False
     assert config.CONFIG.nacos.username is None
     assert config.CONFIG.nacos.password is None
 
 
-def test_load_nacos_configs_from_config_file(tmp_path, gen_config_file):
+def test_load_nacos_configs_from_config_file(configure_with):
     server_addr = "127.0.0.1:8848"
     enable_auth = True
     username = "user"
     password = "pwd"
     namespace = "ns"
     group = "grp"
-    config_file = gen_config_file(
+
+    configure_with(
         {
             "app": {"enable_nacos": True},
             "nacos": {
@@ -106,8 +101,6 @@ def test_load_nacos_configs_from_config_file(tmp_path, gen_config_file):
             },
         }
     )
-
-    config.configure_app_with(config_file)
 
     assert config.CONFIG.nacos.server_addr == server_addr
     assert config.CONFIG.nacos.enable_auth == enable_auth
