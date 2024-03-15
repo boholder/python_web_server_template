@@ -2,15 +2,34 @@ import logging
 import logging.config
 import logging.handlers
 
+import uvicorn
 from asgi_correlation_id import CorrelationIdFilter
 
 from app import config
 
-TRACE_ID_FILTER = CorrelationIdFilter(name="trace_id_filter", uuid_length=16, default_value="-")
+_TRACE_ID_FILTER = CorrelationIdFilter(name="trace_id_filter", uuid_length=16, default_value="-")
 
 
-# It will be added to logging config as "file_handler" for uvicorn config initializing
-def get_file_handler_config() -> dict:
+def configure_uvicorn_logging():
+    extra_filters = [_TRACE_ID_FILTER]
+    for handler in uvicorn.config.LOGGING_CONFIG["handlers"].values():
+        handler["filters"] = handler["filters"] + extra_filters if "filters" in handler else extra_filters
+    for formatter in uvicorn.config.LOGGING_CONFIG["formatters"].values():
+        formatter["fmt"] = config.CONFIG.app.log_format
+
+    file_handler_name = "file_handler"
+    uvicorn.config.LOGGING_CONFIG["handlers"][file_handler_name] = _get_file_handler_config()
+
+    # There are three loggers in uvicorn default logging config: "uvicorn", "uvicorn.access", "uvicorn.error".
+    # We need to add "file_handler" to logger "uvicorn" and "uvicorn.access"
+    # since logger "uvicorn.error" will propagate the log to the other two.
+    for logger in uvicorn.config.LOGGING_CONFIG["loggers"].values():
+        if "handlers" in logger:
+            logger["handlers"] += [file_handler_name]
+
+
+def _get_file_handler_config() -> dict:
+    """It will be added to logging config as "file_handler" for uvicorn config initializing."""
     return {
         "formatter": "default",
         # ref: https://docs.python.org/3/library/logging.handlers.html#timedrotatingfilehandler
@@ -27,7 +46,7 @@ def configure_app_logging(file_handler: logging.Handler | None = None) -> None:
         file_handler = _find_log_file_handler()
 
     console_handler = logging.StreamHandler()
-    console_handler.addFilter(TRACE_ID_FILTER)
+    console_handler.addFilter(_TRACE_ID_FILTER)
     logging.basicConfig(
         handlers=[console_handler, file_handler], level=config.CONFIG.app.log_level, format=config.CONFIG.app.log_format
     )
