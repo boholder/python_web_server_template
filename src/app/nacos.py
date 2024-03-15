@@ -1,3 +1,4 @@
+import asyncio
 import logging
 
 import nacos_sdk_rust_binding_py as nacos
@@ -10,14 +11,33 @@ _NACOS_SERVICE_INSTANCE: nacos.NacosServiceInstance
 log = logging.getLogger(__name__)
 
 
-async def register_onto_nacos():
+async def initialize_nacos():
+    # Note that this method won't be tested,
+    # because Mock and MagicMock is not supported by pickle when running multiprocessing code
+    # ref: https://github.com/python/cpython/issues/100090
     build_nacos_client()
     build_nacos_service_instance()
-
-    _NACOS_CLIENT.register_instance(
-        service_name=config.CONFIG.app.name, group=config.CONFIG.nacos.group, service_instance=_NACOS_SERVICE_INSTANCE
+    await asyncio.get_event_loop().run_in_executor(
+        config.PROCESS_EXECUTOR, register, _NACOS_CLIENT, _NACOS_SERVICE_INSTANCE
     )
-    log.info("Successfully registered onto nacos")
+
+
+def register(client: nacos.NacosNamingClient = None, service_instance: nacos.NacosServiceInstance = None):
+    if client is None:
+        client = _NACOS_CLIENT
+    if service_instance is None:
+        service_instance = _NACOS_SERVICE_INSTANCE
+
+    try:
+        client.register_instance(
+            service_name=config.CONFIG.app.name,
+            group=config.CONFIG.nacos.group,
+            service_instance=service_instance,
+        )
+    except Exception as e:
+        log.error("Failed to register onto nacos", exc_info=e)
+    else:
+        log.info("Successfully registered onto nacos")
 
 
 def build_nacos_client():

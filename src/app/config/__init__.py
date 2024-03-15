@@ -1,4 +1,5 @@
 import argparse
+import concurrent.futures
 import sys
 from pathlib import Path
 
@@ -106,6 +107,10 @@ class Configs(BaseModel):
 # Make sure to use "config.CONFIG.xxx" to access it, so it can retrieve newly updated values
 CONFIG: Configs = Configs()
 
+# Global process pool
+# for tasks that may block the event loop or hold GIL for long time
+PROCESS_EXECUTOR = concurrent.futures.ProcessPoolExecutor()
+
 _ARG_PARSER = argparse.ArgumentParser(description="Web Server")
 _ARG_PARSER.add_argument("-c", "--config", help="Path of the config file", type=Path)
 _ARG_PARSER.add_argument("--debug", help="Enable debug mode", action="store_true")
@@ -156,6 +161,7 @@ def configure_debug_mode(args: argparse.Namespace):
 
 __all__ = [
     "CONFIG",
+    "PROCESS_EXECUTOR",
     "get_command_args",
     "configure_app",
     "configure_app_with",

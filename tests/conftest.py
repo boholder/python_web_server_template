@@ -3,7 +3,7 @@ from unittest.mock import MagicMock
 import pytest
 import yaml
 
-from app import config
+from app import config, nacos
 
 
 @pytest.fixture
@@ -29,9 +29,25 @@ def configure_with():
 
 
 @pytest.fixture
-def mock_nacos_client(monkeypatch):
-    """Mock the nacos client then we don't need to actually connect to the nacos server."""
+def mock_nacos_client_with_config(monkeypatch, configure_with):
+    """
+    Mock the NacosNamingClient then we don't need to actually connect to the nacos server.
+    """
+
     mock_client = MagicMock()
     mock_client.return_value = mock_client
     monkeypatch.setattr("nacos_sdk_rust_binding_py.NacosNamingClient", mock_client)
-    return mock_client
+
+    def wrapper(content: dict):
+        """
+
+        :param content: test configuration
+        :return: mock client
+        """
+
+        configure_with(content)
+        nacos.build_nacos_client()
+        nacos.build_nacos_service_instance()
+        return mock_client
+
+    return wrapper
