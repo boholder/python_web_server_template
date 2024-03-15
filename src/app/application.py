@@ -7,7 +7,6 @@ from fastapi.exception_handlers import http_exception_handler
 from starlette.responses import Response
 
 from app import config
-from app.config import log_config
 from app.routers import demo
 
 log: logging.Logger
@@ -17,7 +16,7 @@ async def _on_app_start():
     config.configure_app()
     # We must configure app logging after uvicorn started,
     # thus the file handler should exist for reusing.
-    log_config.configure_app_logging()
+    config.configure_app_logging()
     global log
     log = logging.getLogger(__name__)
     log.debug(f"Starting application with following configuration: {config.CONFIG}")

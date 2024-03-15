@@ -5,6 +5,8 @@ from pathlib import Path
 import yaml
 from pydantic import BaseModel, field_validator, model_validator
 
+from .log_config import configure_app_logging, configure_uvicorn_logging
+
 
 # noinspection PyNestedDecorators
 # to suppress false positive on overlapping decorators
@@ -104,14 +106,14 @@ class Configs(BaseModel):
 # Make sure to use "config.CONFIG.xxx" to access it, so it can retrieve newly updated values
 CONFIG: Configs = Configs()
 
-ARG_PARSER = argparse.ArgumentParser(description="Web Server")
-ARG_PARSER.add_argument("-c", "--config", help="Path of the config file", type=Path)
-ARG_PARSER.add_argument("--debug", help="Enable debug mode", action="store_true")
+_ARG_PARSER = argparse.ArgumentParser(description="Web Server")
+_ARG_PARSER.add_argument("-c", "--config", help="Path of the config file", type=Path)
+_ARG_PARSER.add_argument("--debug", help="Enable debug mode", action="store_true")
 
 
 def get_command_args(args: list[str] | None = None) -> argparse.Namespace:
     args = sys.argv[1:] if args is None else args
-    return ARG_PARSER.parse_args(args)
+    return _ARG_PARSER.parse_args(args)
 
 
 def configure_app():
@@ -150,3 +152,14 @@ def configure_debug_mode(args: argparse.Namespace):
         global CONFIG
         CONFIG.app.debug_mode = True
         CONFIG.app.log_level = "DEBUG"
+
+
+__all__ = [
+    "CONFIG",
+    "get_command_args",
+    "configure_app",
+    "configure_app_with",
+    "configure_debug_mode",
+    "configure_uvicorn_logging",
+    "configure_app_logging",
+]
