@@ -3,7 +3,7 @@ import sys
 from pathlib import Path
 
 import yaml
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, field_validator, model_validator
 
 
 # noinspection PyNestedDecorators
@@ -36,6 +36,7 @@ class AppConfigs(BaseModel):
     enable_nacos: bool = False
     """Enable Nacos related features"""
 
+    # ref: https://docs.pydantic.dev/latest/concepts/validators/#field-validators
     @field_validator("log_file_path")
     @classmethod
     def post_log_file_path(cls, v: Path) -> Path:
@@ -46,7 +47,6 @@ class AppConfigs(BaseModel):
         return v
 
 
-# noinspection PyNestedDecorators
 class NacosConfigs(BaseModel):
     """Configurations for nacos client"""
 
@@ -60,25 +60,26 @@ class NacosConfigs(BaseModel):
     """
     enable_auth: bool = False
     """Set it to same as nacos server configuration"""
-    username: str = "nacos"
+    username: str | None = "nacos"
     """
     username and password are used for authentication with nacos server,
     only be set to nacos client when enable_auth is True.
     "nacos" is default username/password of a new nacos server.
     """
-    password: str = "nacos"
+    password: str | None = "nacos"
     namespace: str = ""
     """Leave it to "", the nacos server will register this service to default "public" namespace"""
     group: str = ""
     """Leave it to "", the nacos server will register this service to default "DEFAULT_GROUP" group"""
 
-    @field_validator("username", "password", mode="after")
-    @classmethod
-    def parse_auth_config_if_enabled(cls, value, values):
-        if values.data["enable_auth"]:
-            return value
-        else:
-            return None
+    # ref: https://docs.pydantic.dev/latest/concepts/validators/#model-validators
+    @model_validator(mode="after")
+    def remove_username_and_password_if_auth_disabled(self):
+        if not self.enable_auth:
+            self.username = None
+            self.password = None
+
+        return self
 
 
 # noinspection PyNestedDecorators
