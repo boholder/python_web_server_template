@@ -28,7 +28,7 @@ def main():
     config.configure_app()
     _configure_uvicorn_logging()
     uvicorn.run(
-        "app.application:APP",
+        "app.application:FASTAPI_APP",
         host=config.CONFIG.app.host,
         port=config.CONFIG.app.port,
         reload=config.CONFIG.app.debug_mode,
