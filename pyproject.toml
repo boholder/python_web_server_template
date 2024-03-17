@@ -20,7 +20,7 @@ dependencies = [
     # For data object parsing
     "pydantic>=2.6.3",
     # Use alibaba nacos as service discovery mechanism
-    "nacos-sdk-rust-binding-py>=0.3.5",
+    "nacos-sdk-rust-binding-py>=0.3.6a0",
 ]
 requires-python = "==3.11.*"
 readme = "README.md"
