@@ -1,12 +1,11 @@
-import asyncio
 import logging
 
-import nacos_sdk_rust_binding_py as nacos
+import nacos_sdk_rust_binding_py as nacos_sdk
 
 from app import config
 
-_NACOS_CLIENT: nacos.NacosNamingClient
-_NACOS_SERVICE_INSTANCE: nacos.NacosServiceInstance
+_NACOS_CLIENT: nacos_sdk.AsyncNacosNamingClient
+_NACOS_SERVICE_INSTANCE: nacos_sdk.NacosServiceInstance
 
 log = logging.getLogger(__name__)
 
@@ -17,22 +16,15 @@ async def initialize_nacos():
     # ref: https://github.com/python/cpython/issues/100090
     build_nacos_client()
     build_nacos_service_instance()
-    await asyncio.get_event_loop().run_in_executor(
-        config.PROCESS_EXECUTOR, register, _NACOS_CLIENT, _NACOS_SERVICE_INSTANCE
-    )
+    await register()
 
 
-def register(client: nacos.NacosNamingClient = None, service_instance: nacos.NacosServiceInstance = None):
-    if client is None:
-        client = _NACOS_CLIENT
-    if service_instance is None:
-        service_instance = _NACOS_SERVICE_INSTANCE
-
+async def register():
     try:
-        client.register_instance(
+        await _NACOS_CLIENT.register_instance(
             service_name=config.CONFIG.app.name,
             group=config.CONFIG.nacos.group,
-            service_instance=service_instance,
+            service_instance=_NACOS_SERVICE_INSTANCE,
         )
     except Exception as e:
         log.error("Failed to register onto nacos", exc_info=e)
@@ -42,8 +34,8 @@ def register(client: nacos.NacosNamingClient = None, service_instance: nacos.Nac
 
 def build_nacos_client():
     global _NACOS_CLIENT
-    _NACOS_CLIENT = nacos.NacosNamingClient(
-        nacos.ClientOptions(
+    _NACOS_CLIENT = nacos_sdk.AsyncNacosNamingClient(
+        nacos_sdk.ClientOptions(
             server_addr=config.CONFIG.nacos.server_addr,
             namespace=config.CONFIG.nacos.namespace,
             app_name=config.CONFIG.app.name,
@@ -51,11 +43,10 @@ def build_nacos_client():
             password=config.CONFIG.nacos.password,
         )
     )
-    log.debug(f"Nacos client: {_NACOS_CLIENT}")
 
 
 def build_nacos_service_instance():
     global _NACOS_SERVICE_INSTANCE
-    _NACOS_SERVICE_INSTANCE = nacos.NacosServiceInstance(
+    _NACOS_SERVICE_INSTANCE = nacos_sdk.NacosServiceInstance(
         ip=config.CONFIG.app.outer_host, port=config.CONFIG.app.outer_port
     )

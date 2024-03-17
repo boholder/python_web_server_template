@@ -1,4 +1,5 @@
-import nacos_sdk_rust_binding_py as nacos_client
+import nacos_sdk_rust_binding_py as nacos_sdk
+import pytest
 
 from app import config, nacos
 
@@ -12,7 +13,7 @@ def test_build_nacos_client(mock_nacos_client_with_config):
 
     nacos.build_nacos_client()
 
-    actual_options: nacos_client.ClientOptions = mock_client.call_args[0][0]
+    actual_options: nacos_sdk.ClientOptions = mock_client.call_args[0][0]
     # Assert initializing with default config values
     # since they're not set in config file
     assert actual_options.server_addr == server_addr
@@ -29,7 +30,7 @@ def test_build_nacos_client_with_default_username_and_password(mock_nacos_client
 
     nacos.build_nacos_client()
 
-    actual_options: nacos_client.ClientOptions = mock_client.call_args[0][0]
+    actual_options: nacos_sdk.ClientOptions = mock_client.call_args[0][0]
     assert actual_options.username == DEFAULT_NACOS_CONFIG.username
     assert actual_options.password == DEFAULT_NACOS_CONFIG.password
 
@@ -43,12 +44,13 @@ def test_build_service_instance(configure_with):
     assert nacos._NACOS_SERVICE_INSTANCE.port == DEFAULT_APP_CONFIG.outer_port
 
 
-def test_register_onto_nacos(mock_nacos_client_with_config):
+@pytest.mark.asyncio
+async def test_register_onto_nacos(mock_nacos_client_with_config):
     mock_client = mock_nacos_client_with_config(
         {"app": {"enable_nacos": True}, "nacos": {"server_addr": "", "enable_auth": True}}
     )
 
-    nacos.register()
+    await nacos.register()
 
     actual_kwargs = mock_client.register_instance.call_args.kwargs
     assert actual_kwargs["service_name"] == DEFAULT_APP_CONFIG.name

@@ -31,12 +31,12 @@ def configure_with():
 @pytest.fixture
 def mock_nacos_client_with_config(monkeypatch, configure_with):
     """
-    Mock the NacosNamingClient then we don't need to actually connect to the nacos server.
+    Mock the AsyncNacosNamingClient then we don't need to actually connect to the nacos server.
     """
 
     mock_client = MagicMock()
     mock_client.return_value = mock_client
-    monkeypatch.setattr("nacos_sdk_rust_binding_py.NacosNamingClient", mock_client)
+    monkeypatch.setattr("nacos_sdk_rust_binding_py.AsyncNacosNamingClient", mock_client)
 
     def wrapper(content: dict):
         """
