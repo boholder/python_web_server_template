@@ -21,6 +21,8 @@ dependencies = [
     "pydantic>=2.6.3",
     # Use alibaba nacos as service discovery mechanism
     "nacos-sdk-rust-binding-py>=0.3.6a0",
+    # For processing jupyter notebook files
+    "nbformat[fast]>=5.10.3",
 ]
 requires-python = "==3.11.*"
 readme = "README.md"
