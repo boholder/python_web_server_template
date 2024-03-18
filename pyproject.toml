@@ -26,7 +26,10 @@ dependencies = [
     "nbformat[fast]>=5.10.3",
     # For connecting to redis
     "redis>=5.0.3",
+    # For connecting to kafka
     "aiokafka>=0.10.0",
+    # For metrics monitoring with prometheus
+    "prometheus-fastapi-instrumentator>=7.0.0",
 ]
 requires-python = "==3.11.*"
 readme = "README.md"
