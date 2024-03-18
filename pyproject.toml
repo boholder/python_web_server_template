@@ -11,6 +11,7 @@ dependencies = [
     # Underlying web server
     "uvicorn[standard]>=0.27.1",
     # The starlette.testclient module requires the httpx package to be installed.
+    # We also use this package to invoke outer serivce APIs.
     "httpx>=0.27.0",
     # For using X-Request-ID HTTP header or self-generated id as trace id shown in logs
     # ref: https://github.com/snok/asgi-correlation-id
@@ -23,6 +24,8 @@ dependencies = [
     "nacos-sdk-rust-binding-py>=0.3.6a0",
     # For processing jupyter notebook files
     "nbformat[fast]>=5.10.3",
+    # For connecting to redis
+    "redis>=5.0.3",
 ]
 requires-python = "==3.11.*"
 readme = "README.md"
