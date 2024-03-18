@@ -3,7 +3,7 @@ import sys
 from pathlib import Path
 
 import yaml
-from pydantic import BaseModel, field_validator, model_validator
+from pydantic import BaseModel, field_validator
 
 from .log_config import configure_app_logging, configure_uvicorn_logging
 
@@ -35,8 +35,6 @@ class AppConfigs(BaseModel):
     """Log format of ALL logs (including uvicorn)"""
     debug_mode: bool = False
     """When debug_mode is on, log level is set to DEBUG, uvicorn will reload when code changes"""
-    enable_nacos: bool = False
-    """Enable Nacos related features"""
 
     # ref: https://docs.pydantic.dev/latest/concepts/validators/#field-validators
     @field_validator("log_file_path")
@@ -49,56 +47,11 @@ class AppConfigs(BaseModel):
         return v
 
 
-class NacosConfigs(BaseModel):
-    """Configurations for nacos client"""
-
-    server_addr: str
-    """
-    The nacos server(s) address(es)
-    e.g. "127.0.0.1:8848"
-    the underlying "nacos-sdk-rust" library supports multiple server address since v0.2.1
-    e.g. "address:port[,address:port],...]"
-    ref: https://github.com/nacos-group/nacos-sdk-rust/blob/b8f0298822318beaae116fceff59f0c9fe245741/CHANGELOG.md?plain=1#L124C3-L124C51
-    """
-    enable_auth: bool = False
-    """Set it to same as nacos server configuration"""
-    username: str | None = "nacos"
-    """
-    username and password are used for authentication with nacos server,
-    only be set to nacos client when enable_auth is True.
-    "nacos" is default username/password of a new nacos server.
-    """
-    password: str | None = "nacos"
-    namespace: str = ""
-    """Leave it to "", the nacos server will register this service to default "public" namespace"""
-    group: str = ""
-    """Leave it to "", the nacos server will register this service to default "DEFAULT_GROUP" group"""
-
-    # ref: https://docs.pydantic.dev/latest/concepts/validators/#model-validators
-    @model_validator(mode="after")
-    def remove_username_and_password_if_auth_disabled(self):
-        if not self.enable_auth:
-            self.username = None
-            self.password = None
-
-        return self
-
-
 # noinspection PyNestedDecorators
 class Configs(BaseModel):
     """Represents all configuration, provides unified access to configuration values."""
 
     app: AppConfigs = AppConfigs()
-    # Only exists when app.enable_nacos is True
-    nacos: NacosConfigs | None = None
-
-    @field_validator("nacos", mode="before")
-    @classmethod
-    def parse_nacos_config_if_enabled(cls, value, values):
-        if values.data["app"].enable_nacos:
-            return value
-        else:
-            return None
 
 
 # Global configuration object
@@ -156,7 +109,6 @@ def configure_debug_mode(args: argparse.Namespace):
 
 __all__ = [
     "CONFIG",
-    "PROCESS_EXECUTOR",
     "get_command_args",
     "configure_app",
     "configure_app_with",
