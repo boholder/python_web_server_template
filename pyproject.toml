@@ -30,6 +30,8 @@ dependencies = [
     "aiokafka>=0.10.0",
     # For metrics monitoring with prometheus
     "prometheus-fastapi-instrumentator>=7.0.0",
+    # For distributed computing
+    "dask[distributed]>=2024.3.1",
 ]
 requires-python = "==3.11.*"
 readme = "README.md"
