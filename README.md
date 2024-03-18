@@ -5,10 +5,16 @@
 This project is mainly for my own use, but I'll leave separate branches for different features.
 The `main` branch contains all features.
 The `basic` branch contains only early configuration, logging, ci code.
+The `nacos` branch contains Nacos integration.
 
 ## Configuration
 
-For all available configuration see [AppConfigs](./src/app/config/__init__.py) class.
+For all available configuration see [Configs](./src/app/config/__init__.py) class.
+
+## Nacos Service Discovery Integration
+
+This project uses [Nacos](https://nacos.io/en/) as Service Discovery,
+more specifically, this project leverages PyO3-based library [nacos-sdk-rust-binding-py](https://github.com/opc-source/nacos-sdk-rust-binding-py) to connect Nacos.
 
 ## Logging
 
