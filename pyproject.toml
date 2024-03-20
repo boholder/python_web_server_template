@@ -94,6 +94,7 @@ known-first-party = ["app"]
 # https://github.com/codespell-project/codespell?tab=readme-ov-file#using-a-config-file
 [tool.codespell]
 ignore-words-list = ["ba", "te", "falsy"]
+skip = "*.toml,*.yaml,*.md"
 
 [project.scripts]
 myapp = "app.__main__:main"
